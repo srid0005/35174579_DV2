@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Malaysia Flood Crisis — Data Visualisation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="css/style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar">
+    <div class="brand-block">
+      <div class="brand-icon">🌊</div>
+      <div class="brand-text">
+        <p class="brand-overline">FIT2179 · DV2</p>
+        <h2>Malaysia<br>Floods</h2>
+        <p class="brand-tagline">1965 – 2024</p>
+      </div>
+    </div>
+
+    <nav class="side-nav">
+      <a href="#s1" class="side-link active"><span class="side-num">1</span>The Crisis</a>
+      <a href="#s2" class="side-link"><span class="side-num">2</span>74 Disasters</a>
+      <a href="#s3" class="side-link"><span class="side-num">3</span>Geography</a>
+      <a href="#s4" class="side-link"><span class="side-num">4</span>Human Cost</a>
+      <a href="#s5" class="side-link"><span class="side-num">5</span>Economic Toll</a>
+    </nav>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-meta">
+      <div class="meta-block"><strong>Data Sources</strong></div>
+      <ul class="meta-list">
+        <li><a href="https://www.emdat.be" target="_blank">EM-DAT International Disaster Database</a></li>
+        <li><a href="https://www.dosm.gov.my" target="_blank">DOSM — Dept. of Statistics Malaysia</a></li>
+      </ul>
+      <div class="sidebar-divider"></div>
+      <div class="meta-block">
+        <strong>Author</strong><br>
+        Sumaiya Rana Ridy<br>
+        Student ID: 35174579<br>
+        Monash University Malaysia · 2026
+      </div>
+      <div class="meta-block" style="margin-top:10px;font-size:0.68rem;color:#7a9dbf;">
+        AI tools (Claude by Anthropic) used for code assistance, grammar checking, and data preparation. All design, analysis, and narrative are original.
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===================== CONTENT ===================== -->
+  <main class="content">
+
+    <!-- HERO -->
+    <header class="hero-panel" id="overview">
+      <div class="hero-copy">
+        <p class="hero-kicker">Malaysia · Sixty Years of Flooding</p>
+        <div class="hero-heading-group">
+          <h1>A Nation Living<br>With Floods</h1>
+          <h2>Frequency, displacement and economic cost</h2>
+        </div>
+        <p class="hero-description">
+          Malaysia has recorded 74 significant flood events since 1965.
+          The crisis is growing in frequency, scale, and economic damage —
+          driven by the Northeast Monsoon and worsened by rapid urbanisation.
+          This visualisation traces six decades of disaster using EM-DAT
+          and DOSM survey data.
+        </p>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <p class="kpi-label">Events Recorded</p>
+          <p class="kpi-value">74</p>
+          <p class="kpi-meta">EM-DAT significant events since 1965</p>
+        </div>
+        <div class="kpi-card">
+          <p class="kpi-label">People Displaced</p>
+          <p class="kpi-value">6.7M+</p>
+          <p class="kpi-meta">Cumulative across all 74 events</p>
+        </div>
+        <div class="kpi-card">
+          <p class="kpi-label">Deadliest Year</p>
+          <p class="kpi-value">2021</p>
+          <p class="kpi-meta">79 deaths · 164,000 displaced</p>
+        </div>
+        <div class="kpi-card">
+          <p class="kpi-label">2024 Damage</p>
+          <p class="kpi-value">RM 933M</p>
+          <p class="kpi-meta">DOSM flood impact survey, 16 states</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==================== SECTION 1 ==================== -->
+    <section class="dashboard-section" id="s1">
+      <div class="section-banner blue">
+        <span class="section-number">1</span>
+        <div>
+          <p class="section-kicker">The Scale of the Crisis</p>
+          <h3>Six decades of worsening flood records</h3>
+        </div>
+      </div>
+
+      <!-- Chart 1 — full width -->
+      <div class="grid grid-1">
+        <article class="chart-card">
+          <h4>Twelve Landmark Events That Defined the Crisis</h4>
+          <p class="chart-note">Each bar = one major disaster. Length shows people displaced. Colour shows flood type. Hover for full details including deaths and month.</p>
+          <div class="chart-insight"><strong>Key insight:</strong> The 1965 East Coast floods displaced 300,000 people. The 2014 Kelantan catastrophe and 2021 Selangor disaster are the modern equivalents. Displacement has not declined.</div>
+          <div id="chart1"></div>
+        </article>
+      </div>
+
+      <!-- Charts 2 + 3 — side by side -->
+      <div class="grid grid-2">
+        <article class="chart-card">
+          <h4>Displacement Surges Across Six Decades</h4>
+          <p class="chart-note">Each dot = one recorded flood year. Line traces the trend. Drag the sliders to zoom into any time window — the chart rescales automatically.</p>
+          <div class="chart-insight"><strong>Key insight:</strong> After 2000, multiple large events per year became the new normal. The post-2000 era is a new and more dangerous phase.</div>
+          <div id="chart2"></div>
+        </article>
+        <article class="chart-card">
+          <h4>Which States Bore the Greatest Burden — and Did It Change?</h4>
+          <p class="chart-note">Each coloured line = one state across two eras. A rising line means growing displacement. Use the dropdown to highlight a specific state.</p>
+          <div class="chart-insight"><strong>Key insight:</strong> Pahang and Johor dominated 2000–2014. Sabah and Perlis are the rising states — their burden has grown sharply since 2015.</div>
+          <div id="chart3"></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==================== SECTION 2 ==================== -->
+    <section class="dashboard-section" id="s2">
+      <div class="section-banner teal">
+        <span class="section-number">2</span>
+        <div>
+          <p class="section-kicker">Patterns in 74 Disasters</p>
+          <h3>When floods strike — and how severe they are</h3>
+        </div>
+      </div>
+
+      <!-- Chart 4 — full width -->
+      <div class="grid grid-1">
+        <article class="chart-card">
+          <h4>Every Flood Event — Seasonal Calendar</h4>
+          <p class="chart-note">Each segment = one month. Inner ring = number of events. Outer ring = total people displaced. Colour = season. Hover any segment for exact figures.</p>
+          <div class="chart-insight"><strong>Key insight:</strong> December alone has 21 recorded events and over 1.3 million displaced. The Northeast Monsoon (blue) dominates — it is the defining season of Malaysia's flood crisis.</div>
+          <div id="chart4" style="display:flex;justify-content:center;"></div>
+        </article>
+      </div>
+
+      <!-- Charts 5 + 6 — side by side -->
+      <div class="grid grid-2">
+        <article class="chart-card">
+          <h4>State–Month Heatmap: Where and When Floods Cluster</h4>
+          <p class="chart-note">Darker blue = more events in that state-month combination across 60 years. Numbers show event counts in the darkest cells. Click a state row to highlight it.</p>
+          <div class="chart-insight"><strong>Key insight:</strong> Kelantan, Pahang, and Terengganu each have 10 events in December alone. Sabah's pattern is different — it peaks in the SW Monsoon months.</div>
+          <div id="chart5"></div>
+        </article>
+        <article class="chart-card">
+          <h4>Are Deaths and Events Connected? A Diverging View</h4>
+          <p class="chart-note">Each year: red bars left = deaths, blue bars right = events, centred at zero. Years with many events do not always have high death tolls.</p>
+          <div class="chart-insight"><strong>Key insight:</strong> 2021 has the longest red bar (79 deaths) with only 8 events. 2016 had 4 events and zero deaths. Frequency does not predict lethality.</div>
+          <div id="chart6"></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==================== SECTION 3 ==================== -->
+    <section class="dashboard-section" id="s3">
+      <div class="section-banner navy">
+        <span class="section-number">3</span>
+        <div>
+          <p class="section-kicker">Geography</p>
+          <h3>Where floods hit hardest across Malaysia</h3>
+        </div>
+      </div>
+
+      <!-- Chart 8 — full width -->
+      <div class="grid grid-1">
+        <article class="chart-card">
+          <h4>Two Dimensions of Flood Risk on One Map</h4>
+          <p class="chart-note">Background shows event frequency (darker = more events). Circles show total displaced (size) and average severity (orange intensity). Hover any circle for all three values.</p>
+          <div class="chart-insight"><strong>Key insight:</strong> Pahang and Johor are frequent and large-scale. Perlis has only 3 events but the highest average displacement per event — rare but catastrophic.</div>
+          <div id="chart8"></div>
+        </article>
+      </div>
+
+      <!-- Charts 7 + 9 — side by side -->
+      <div class="grid grid-2">
+        <article class="chart-card">
+          <h4>Flood Event Frequency by State</h4>
+          <p class="chart-note">Darker blue = more recorded flood events since 1965. Johor, Pahang, Kelantan, and Terengganu each have 18–19 events — near-annual exposure. Click to highlight.</p>
+          <div class="chart-insight"><strong>Key insight:</strong> East Coast peninsular states face near-annual flooding. This is not a rare disaster — it is a routine one.</div>
+          <div id="chart7"></div>
+        </article>
+        <article class="chart-card">
+          <h4>Frequency vs. Severity — Four Risk Profiles</h4>
+          <p class="chart-note">X-axis = event count. Y-axis = avg displaced per event. Bubble size = total displaced. Colour = region. Dashed lines divide states into four quadrants.</p>
+          <div class="chart-insight"><strong>Key insight:</strong> Perlis sits in "Rare but Catastrophic." Johor and Pahang are in "High Risk." Different states need completely different response strategies.</div>
+          <div id="chart9"></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==================== SECTION 4 ==================== -->
+    <section class="dashboard-section" id="s4">
+      <div class="section-banner red">
+        <span class="section-number">4</span>
+        <div>
+          <p class="section-kicker">Human Cost</p>
+          <h3>Deaths, displacement and six decades of loss</h3>
+        </div>
+      </div>
+
+      <!-- Charts 10 + 11 — side by side -->
+      <div class="grid grid-2">
+        <article class="chart-card">
+          <h4>Total Deaths by Decade — The 2020s Are the Worst</h4>
+          <p class="chart-note">Each lollipop = total flood deaths in that decade. Red = exceeds 90 deaths. Labels show exact figures. The 2020s already exceed all previous decades.</p>
+          <div class="chart-insight"><strong>Key insight:</strong> The 2020s have recorded 108 deaths with half the decade remaining. Modern early-warning systems reduce per-event deaths — but more events means more total deaths.</div>
+          <div id="chart10"></div>
+        </article>
+        <article class="chart-card">
+          <h4>High Displacement Does Not Always Mean High Deaths</h4>
+          <p class="chart-note">Each bubble = one year. X-axis (log scale) = displaced. Y-axis = deaths. Size = events. Colour = decade. Click a decade in the legend to isolate it.</p>
+          <div class="chart-insight"><strong>Key insight:</strong> 2014 displaced 230,000 but killed only 17. 1967 killed 50 with fewer displaced. Displacement and lethality have decoupled since the 1990s.</div>
+          <div id="chart11"></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==================== SECTION 5 ==================== -->
+    <section class="dashboard-section" id="s5">
+      <div class="section-banner gold">
+        <span class="section-number">5</span>
+        <div>
+          <p class="section-kicker">Economic Toll</p>
+          <h3>The financial burden of six decades of flooding</h3>
+        </div>
+      </div>
+
+      <!-- Chart 12 — full width -->
+      <div class="grid grid-1">
+        <article class="chart-card">
+          <h4>Most States Got Worse Between 2022 and 2024</h4>
+          <p class="chart-note">Grey dot = 2022 loss. Coloured dot = 2024 loss. Red line = damage increased. Teal line = damage fell. Sorted by 2024 loss.</p>
+          <div class="chart-insight"><strong>Key insight:</strong> The majority of Malaysian states are on a worsening trajectory. Flood damage is not declining as a share of state economies.</div>
+          <div id="chart12"></div>
+        </article>
+      </div>
+
+      <!-- Charts 13 + 14 — side by side -->
+      <div class="grid grid-2">
+        <article class="chart-card">
+          <h4>What Gets Damaged Differs by State</h4>
+          <p class="chart-note">Each bar = percentage of total damage by category. Numbers inside show RM million values. Only three states had full DOSM category data.</p>
+          <div class="chart-insight"><strong>Key insight:</strong> Kelantan's damage is 53% residential. Kedah's is 69% other assets. A single national response cannot serve all states equally.</div>
+          <div id="chart13"></div>
+        </article>
+        <article class="chart-card">
+          <h4>2021 Was a Once-in-a-Generation Shock</h4>
+          <p class="chart-note">Filled area = annual flood damage in RM million. Red dashed line = pre-crisis average of RM 600M. 2021 cost RM 6.1 billion — ten times the average.</p>
+          <div class="chart-insight"><strong>Key insight:</strong> Even in non-disaster years, Malaysia spends hundreds of millions recovering from floods. This is a permanent and growing fiscal burden.</div>
+          <div id="chart14"></div>
+        </article>
+      </div>
+
+      <!-- Takeaway strip -->
+      <div class="takeaway-strip">
+        <div class="takeaway-card" data-num="1">
+          <h5>Frequency</h5>
+          <p>Flood events doubled after 2000. Eight events in 2021 alone — the highest ever recorded in a single year.</p>
+        </div>
+        <div class="takeaway-card" data-num="2">
+          <h5>Geography</h5>
+          <p>East Coast states bear disproportionate burden. But Sabah and Perlis are the fastest-rising risk states.</p>
+        </div>
+        <div class="takeaway-card" data-num="3">
+          <h5>Seasonality</h5>
+          <p>December accounts for 1.3 million displaced across 60 years. The NE Monsoon is the defining crisis season.</p>
+        </div>
+        <div class="takeaway-card" data-num="4">
+          <h5>Economics</h5>
+          <p>2021 cost RM 6.1 billion — 0.4% of GDP. Damage is rising again in 2024 at RM 933M.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="page-footer">
+      <div>
+        <h4>Author</h4>
+        <p>Sumaiya Rana Ridy<br>Student ID: 35174579<br>FIT2179 Data Visualisation 2<br>Monash University Malaysia · 2026</p>
+      </div>
+      <div>
+        <h4>Data Sources</h4>
+        <p><a href="https://www.emdat.be" target="_blank">EM-DAT International Disaster Database</a><br>Centre for Research on the Epidemiology of Disasters, UCLouvain</p>
+        <p style="margin-top:8px;"><a href="https://www.dosm.gov.my" target="_blank">DOSM Flood Impact Surveys 2022 &amp; 2024</a><br>Department of Statistics Malaysia</p>
+      </div>
+      <div>
+        <h4>Acknowledgements</h4>
+        <p>AI tools (Claude by Anthropic) were used for grammar checking, code assistance, and data preparation. All visualisation design, data analysis, and narrative are the author's original work.</p>
+        <p style="margin-top:8px;">Geographic boundaries: malaysia-states-simplified.json (GeoJSON, WGS84)</p>
+      </div>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  const opts = { renderer: 'svg', actions: false };
+
+  vegaEmbed('#chart1',  'charts/chart1.json',  opts);
+
+  vegaEmbed('#chart2',  'charts/chart2.json',  opts).then(function() {
+    const c = document.getElementById('chart2');
+    setTimeout(() => {
+      c.querySelectorAll('input[type=range]').forEach(el => {
+        el.style.cssText = 'width:100%;max-width:360px;accent-color:#1a6fa8;cursor:pointer;display:block;margin-top:4px;';
+      });
+      c.querySelectorAll('.vega-bind-name').forEach(el => {
+        el.style.cssText = 'font-size:0.75rem;font-weight:600;color:#5a6b7c;display:block;margin-top:8px;';
+      });
+      c.querySelectorAll('.vega-bind').forEach(el => {
+        el.style.cssText = 'padding:10px 14px;background:#f5f8fc;border-radius:8px;border:1px solid #d4dce6;margin-top:10px;';
+      });
+    }, 700);
+  });
+
+  vegaEmbed('#chart3',  'charts/chart3.json',  opts).then(function() {
+    const c = document.getElementById('chart3');
+    setTimeout(() => {
+      c.querySelectorAll('select').forEach(el => {
+        el.style.cssText = 'font-size:0.8rem;padding:5px 10px;border-radius:6px;border:1px solid #d4dce6;background:#fff;color:#0d1b2a;cursor:pointer;margin-top:8px;';
+      });
+      c.querySelectorAll('.vega-bind-name').forEach(el => {
+        el.style.cssText = 'font-size:0.75rem;font-weight:600;color:#5a6b7c;display:block;margin-top:8px;';
+      });
+    }, 700);
+  });
+
+  vegaEmbed('#chart4',  'charts/chart4.json',  opts);
+  vegaEmbed('#chart5',  'charts/chart5.json',  opts);
+
+  vegaEmbed('#chart6',  'charts/chart6.json',  opts).then(function() {
+    const c = document.getElementById('chart6');
+    setTimeout(() => {
+      c.querySelectorAll('input[type=range]').forEach(el => {
+        el.style.cssText = 'width:100%;max-width:340px;accent-color:#c0392b;cursor:pointer;display:block;margin-top:4px;';
+      });
+      c.querySelectorAll('.vega-bind-name').forEach(el => {
+        el.style.cssText = 'font-size:0.72rem;font-weight:600;color:#8b1f1f;white-space:nowrap;';
+      });
+      c.querySelectorAll('.vega-bind').forEach(el => {
+        el.style.cssText = 'padding:4px 10px;background:#fdf5f5;border-radius:6px;border:1px solid #f0d0cc;margin-top:6px;display:inline-flex;align-items:center;gap:8px;margin-right:6px;';
+      });
+      const b = c.querySelector('.vega-bindings');
+      if (b) b.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;';
+    }, 700);
+  });
+
+  vegaEmbed('#chart7',  'charts/chart7.json',  opts);
+  vegaEmbed('#chart8',  'charts/chart8.json',  opts);
+
+  vegaEmbed('#chart9',  'charts/chart9.json',  opts).then(function() {
+    const c = document.getElementById('chart9');
+    setTimeout(() => {
+      c.querySelectorAll('select').forEach(el => {
+        el.style.cssText = 'font-size:0.8rem;padding:5px 10px;border-radius:6px;border:1px solid #d4dce6;background:#fff;color:#0d1b2a;cursor:pointer;margin-top:8px;';
+      });
+    }, 700);
+  });
+
+  vegaEmbed('#chart10', 'charts/chart10.json', opts);
+
+  vegaEmbed('#chart11', 'charts/chart11.json', opts).then(function() {
+    const c = document.getElementById('chart11');
+    setTimeout(() => {
+      c.querySelectorAll('input[type=range]').forEach(el => {
+        el.style.cssText = 'width:100%;max-width:380px;accent-color:#c0392b;cursor:pointer;display:block;margin-top:4px;';
+      });
+      c.querySelectorAll('.vega-bind-name').forEach(el => {
+        el.style.cssText = 'font-size:0.75rem;font-weight:700;color:#526070;display:block;margin-top:8px;';
+      });
+      c.querySelectorAll('.vega-bind').forEach(el => {
+        el.style.cssText = 'padding:10px 14px;background:#fdf5f5;border-radius:8px;border:1px solid #f0d0cc;margin-top:10px;';
+      });
+    }, 700);
+  });
+
+  vegaEmbed('#chart12', 'charts/chart12.json', opts);
+  vegaEmbed('#chart13', 'charts/chart13.json', opts);
+  vegaEmbed('#chart14', 'charts/chart14.json', opts);
+
+  /* Active nav highlight on scroll */
+  const secs = document.querySelectorAll('section[id], header[id]');
+  const links = document.querySelectorAll('.side-link');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`.side-link[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  secs.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
